@@ -1,3 +1,4 @@
+# Copyright (c) 2025 https://github.com/rasmabayu. All rights reserved.
 apiVersion: rabbitmq.com/v1beta1
 kind: RabbitmqCluster
 metadata:

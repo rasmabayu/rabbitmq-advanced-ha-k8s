@@ -1,3 +1,4 @@
+<!-- Copyright (c) 2025 https://github.com/rasmabayu. All rights reserved. -->
 # Runbook (operations)
 
 - Scaling brokers: increase replicas (note: adding brokers requires rebalance and consideration)

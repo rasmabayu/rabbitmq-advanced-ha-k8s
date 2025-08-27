@@ -1,3 +1,4 @@
+# Copyright (c) 2025 https://github.com/rasmabayu. All rights reserved.
 name: CI - Validate Manifests
 
 on: [push, pull_request]

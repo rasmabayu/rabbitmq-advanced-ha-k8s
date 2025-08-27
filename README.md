@@ -1,3 +1,4 @@
+<!-- Copyright (c) 2025 https://github.com/rasmabayu. All rights reserved. -->
 # 🐇 RabbitMQ Cluster — High Availability on Kubernetes 🚀
 
 Repository: reference deployment for a production-grade **RabbitMQ cluster** with advanced high-availability features on Kubernetes.

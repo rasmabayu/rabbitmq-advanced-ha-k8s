@@ -1,3 +1,4 @@
+<!-- Copyright (c) 2025 https://github.com/rasmabayu. All rights reserved. -->
 # Architecture — RabbitMQ Advanced HA on Kubernetes
 
 Components:

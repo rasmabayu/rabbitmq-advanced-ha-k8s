@@ -1,3 +1,4 @@
+# Copyright (c) 2025 https://github.com/rasmabayu. All rights reserved.
 # RabbitMQ Cluster Operator installation (recommended via Helm)
 # Example:
 #   helm repo add rabbitmq https://charts.rabbitmq.com
