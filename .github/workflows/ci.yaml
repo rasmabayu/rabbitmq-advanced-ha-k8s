@@ -1,3 +1,4 @@
+# Copyright (c) 2025 https://github.com/rasmabayu. All rights reserved.
 name: CI - Validate Manifests
 
 on: [push, pull_request]
@@ -10,12 +11,18 @@ jobs:
 
       - name: Install kubeconform
         run: |
-          KUBECONFORM_VERSION="0.6.0"  # pin a stable version
+          set -e
+          KUBECONFORM_VERSION="0.6.0"
+          echo "[*] Downloading kubeconform v${KUBECONFORM_VERSION}"
           curl -sSL -o kubeconform https://github.com/yannh/kubeconform/releases/download/v${KUBECONFORM_VERSION}/kubeconform-linux-amd64
           chmod +x kubeconform
           sudo mv kubeconform /usr/local/bin/
-          kubeconform version
+          echo "[*] kubeconform version:"
+          /usr/local/bin/kubeconform version
 
       - name: Validate manifests
         run: |
-          find manifests -type f -name '*.yaml' -print0 | xargs -0 -n1 kubeconform -schema-location default
+          echo "[*] Validating all YAML manifests"
+          # This safely finds all .yaml/.yml files and validates them in one go
+          find manifests -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | xargs -0 kubeconform -schema-location default
+
