@@ -9,20 +9,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install kubeconform
-        run: |
-          set -e
-          KUBECONFORM_VERSION="0.6.0"
-          echo "[*] Downloading kubeconform v${KUBECONFORM_VERSION}"
-          curl -sSL -o kubeconform https://github.com/yannh/kubeconform/releases/download/v${KUBECONFORM_VERSION}/kubeconform-linux-amd64
-          chmod +x kubeconform
-          sudo mv kubeconform /usr/local/bin/
-          echo "[*] kubeconform version:"
-          /usr/local/bin/kubeconform version
+      - name: Setup kubeconform
+        uses: actions/setup-kubeconform@v1
+        with:
+          version: '0.6.0'  # pin stable version
 
       - name: Validate manifests
         run: |
           echo "[*] Validating all YAML manifests"
-          # This safely finds all .yaml/.yml files and validates them in one go
           find manifests -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | xargs -0 kubeconform -schema-location default
+          echo "[*] Validation completed"
 
