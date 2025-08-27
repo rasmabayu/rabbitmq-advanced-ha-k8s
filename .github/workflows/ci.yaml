@@ -26,6 +26,6 @@ jobs:
         run: |
           echo "[*] Validating all YAML manifests"
           find manifests -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | \
-          xargs -0 kubeconform -schema-location default --skip-missing-schemas
+          xargs -0 kubeconform -schema-location default -ignore-missing-schemas
           echo "[*] Validation completed successfully"
 
