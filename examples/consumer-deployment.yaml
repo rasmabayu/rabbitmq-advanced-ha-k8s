@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-consumer
+  namespace: messaging
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: example-consumer
+  template:
+    metadata:
+      labels:
+        app: example-consumer
+    spec:
+      containers:
+      - name: consumer
+        image: python:3.10-slim
+        command: ["sh","-c","pip install pika && python -u -c \"import pika,os; params=pika.ConnectionParameters(host='rabbitmq-prod.rabbitmq.svc.cluster.local'); conn=pika.BlockingConnection(params); ch=conn.channel(); ch.queue_declare(queue='orders', durable=True); \
+        def callback(ch, method, properties, body): print('got', body); ch.basic_ack(method.delivery_tag) ;\
+        ch.basic_consume('orders', callback); ch.start_consuming()\""]

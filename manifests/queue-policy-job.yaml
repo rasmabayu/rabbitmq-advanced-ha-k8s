@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rabbitmq-set-quorum-policy
+  namespace: messaging
+spec:
+  template:
+    spec:
+      containers:
+      - name: set-policy
+        image: curlimages/curl:7.85.0
+        command:
+          - /bin/sh
+          - -c
+          - |
+            # Wait until service is available (simple loop)
+            for i in 1 2 3 4 5 6 7 8 9 10; do
+              if curl -sS http://rabbitmq-prod.rabbitmq.svc.cluster.local:15672/api/health/checks/alarms >/dev/null 2>&1; then
+                break
+              fi
+              echo "waiting for rabbitmq api..."
+              sleep 5
+            done
+            # create policy for quorum queues (example)
+            curl -u user:password -H "content-type:application/json" -XPUT \
+              http://rabbitmq-prod.rabbitmq.svc.cluster.local:15672/api/policies/%2f/quorum-all \
+              -d '{"pattern": "^(quorum\\.)","definition":{"quorum": true,"ha-mode":"exactly","ha-params":2},"priority":0}'
+      restartPolicy: OnFailure

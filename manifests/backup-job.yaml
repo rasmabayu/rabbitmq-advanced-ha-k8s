@@ -1,0 +1,15 @@
+# Backup example (PVC snapshot or logical backup via rabbitmqctl/export)
+# This is a placeholder. Implementation depends on cluster CSI snapshot provider.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rabbitmq-backup-placeholder
+  namespace: messaging
+spec:
+  template:
+    spec:
+      containers:
+      - name: echo
+        image: busybox
+        command: ["sh","-c","echo 'Implement PVC snapshot or use rabbitmqctl export_definitions'"]
+      restartPolicy: Never

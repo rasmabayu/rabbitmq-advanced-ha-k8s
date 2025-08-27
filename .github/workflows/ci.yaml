@@ -1,0 +1,16 @@
+name: CI - Validate Manifests
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install kubeconform
+        run: |
+          sudo curl -L -o /usr/local/bin/kubeconform https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64
+          sudo chmod +x /usr/local/bin/kubeconform
+      - name: Validate manifests
+        run: |
+          find manifests -type f -name '*.yaml' -print0 | xargs -0 -n1 kubeconform -schema-location default

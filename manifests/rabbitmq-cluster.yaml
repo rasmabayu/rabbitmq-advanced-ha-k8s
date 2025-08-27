@@ -1,0 +1,48 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmq-prod
+  namespace: messaging
+spec:
+  replicas: 3
+  rabbitmq:
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "2000m"
+        memory: "4Gi"
+    # enable management plugin and prometheus metrics
+    additionalPlugins:
+      - rabbitmq_prometheus
+      - rabbitmq_management
+    extraConfiguration: |
+      # recommended tuning for production
+      vm_memory_high_watermark.relative = 0.6
+      tcp_listen_options.backlog = 256
+  persistence:
+    storageClassName: ""
+    # size per node
+    storage: 50Gi
+  # anti-affinity / spread pods
+  podTemplate:
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: rabbitmq
+              topologyKey: kubernetes.io/hostname
+      tolerations:
+        - key: "node-role.kubernetes.io/infra"
+          operator: "Exists"
+  readinessProbe:
+    exec:
+      command:
+        - "rabbitmq-diagnostics"
+        - "status"
+  # PodDisruptionBudget example
+  podDisruptionBudget:
+    maxUnavailable: 1

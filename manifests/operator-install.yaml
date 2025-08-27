@@ -1,0 +1,7 @@
+# RabbitMQ Cluster Operator installation (recommended via Helm)
+# Example:
+#   helm repo add rabbitmq https://charts.rabbitmq.com
+#   helm repo update
+#   helm install rabbitmq-operator rabbitmq/rabbitmq-operator --create-namespace -n rabbitmq-system
+#
+# You can also install from operatorhub or by applying manifests from the operator repo.

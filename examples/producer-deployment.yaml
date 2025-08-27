@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-producer
+  namespace: messaging
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: example-producer
+  template:
+    metadata:
+      labels:
+        app: example-producer
+    spec:
+      containers:
+      - name: producer
+        image: python:3.10-slim
+        command: ["sh","-c","pip install pika && python -u -c \"import pika,os,time; params=pika.ConnectionParameters(host='rabbitmq-prod.rabbitmq.svc.cluster.local'); conn=pika.BlockingConnection(params); ch=conn.channel(); ch.queue_declare(queue='orders', durable=True); i=0;  \
+        while True: ch.basic_publish(exchange='', routing_key='orders', body=f'order-{i}'); i+=1; time.sleep(0.01)\""]
