@@ -6,6 +6,7 @@ on: [push, pull_request]
 jobs:
   validate:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -19,11 +20,12 @@ jobs:
           chmod +x kubeconform
           sudo mv kubeconform /usr/local/bin/
           echo "[*] kubeconform version:"
-          /usr/local/bin/kubeconform version
+          /usr/local/bin/kubeconform --version
 
       - name: Validate manifests
         run: |
           echo "[*] Validating all YAML manifests"
           find manifests -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | xargs -0 kubeconform -schema-location default
           echo "[*] Validation completed successfully"
+
 
