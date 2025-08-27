@@ -8,10 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Install kubeconform
         run: |
-          sudo curl -L -o /usr/local/bin/kubeconform https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64
+          KUBECONFORM_VERSION="0.6.0"  # pin a stable version
+          curl -sSL -o kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/download/v${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz
+          tar -xzf kubeconform.tar.gz
+          sudo mv kubeconform /usr/local/bin/
           sudo chmod +x /usr/local/bin/kubeconform
+          kubeconform version
+
       - name: Validate manifests
         run: |
           find manifests -type f -name '*.yaml' -print0 | xargs -0 -n1 kubeconform -schema-location default
